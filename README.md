@@ -6,5 +6,5 @@ This repo contains my personal solutions for the NCSS Challenge from various yea
 Years
 -----
 
-2012: Intermediate Stream
-2013: Advanced Stream
+* 2012: Intermediate Stream
+* 2013: Advanced Stream
