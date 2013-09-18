@@ -1,18 +1,22 @@
 #!/usr/bin/env python2
 
-def code(col,msg):
-    peeps = []
-    for x in col:
-        worked = True
-        if len(x) > len(msg):
-            worked = False
-        else:
-            for y in x: #each char
-                if y not in msg[x.index(y)]:
-                    worked = False
-        if worked:
-            peeps.append(x)
-    return peeps
+def code(col, msg):
+	possible = []
+	for person in col:
+		worked = True
+		if len(person) > len(msg):
+			worked = False
+		else:
+			for char in enumerate(person): #each char
+				if char[1] not in msg[char[0]]:
+					worked = False
+					break
+		if worked:
+			possible += [person]
+	return possible
 
-for x in code(raw_input("Who are your collegues? ").split(), raw_input("What is the message? ").split()):
-    print x,"could have written this."
+col = raw_input("Who are your collegues? ").split()
+msg = raw_input("What is the message? ").split()
+
+for x in code(col, msg):
+	print x,"could have written this."

@@ -3,10 +3,9 @@
 num = int(raw_input("How many steps? "))
 i = 2
 
-print "__" #first line
+print "__"
 
-while i < 2 * num:
-	print " " * (i) + "|_"
-	i += 2
+for i in range(1, 2 * num, 2)[:-1]:
+	print " " * (i+1) + "|_"
 
-print "_" *(2 *(num))+"|"  #final line
+print "__" * num + "|"

@@ -1,11 +1,11 @@
 #!/usr/bin/env python2
 
+import math
+
 polly = raw_input("Polly: ")
-if(int(len(polly)) % 10 == 0):
-	num_crackers = int(len(polly) / 10)
-else:
-	num_crackers = int((len(polly) / 10)+1)
-if polly == '':
+num_crackers = math.ceil(len(polly) / 10.0)
+
+if not polly:
 	print " "
 else:
-	print "CRACKER " * num_crackers
+	print "CRACKER " * int(num_crackers)

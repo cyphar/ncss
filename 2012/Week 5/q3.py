@@ -1,32 +1,30 @@
 #!/usr/bin/env python2
 
-import math
-def snake(rows):
-	r = []
-	for x in ''.join(rows):
-		r.append(x)
-	if "@" not in r or "p" not in r:
-		return "error";
-	leng = len(rows[0])
-	final = ""
-	a_h = math.ceil(r.index("@") / leng)
-	p_h = math.ceil(r.index("p") / leng)
-	a_l = r.index("@") % leng
-	p_l = r.index("p") % leng
-	if a_h > p_h:
-		final += "down\n"
-	elif a_h < p_h:
-		final += "up\n"
-	if a_l > p_l:
-		final += "right\n"
-	elif a_l < p_l:
-		final += "left\n"
-	return final[:-1]
+inp = list(iter(lambda:raw_input("Row: "), ""))
+grid = {}
+for y in enumerate(inp):
+	for x in enumerate(y[1]):
+		grid[x[1]] = (x[0], y[0])
 
-l = []
-while True:
-	s = raw_input("Row:")
-	if not s:
-		break
-	l.append(s)
-print snake(l)
+def snake():
+	if "@" not in grid or "p" not in grid:
+		return ["error"]
+
+	apple = grid["@"]
+	person = grid["p"]
+
+	out = []
+
+	if apple[1] > person[1]:
+		out += ["down"]
+	elif apple[1] < person[1]:
+		out += ["up"]
+
+	if apple[0] > person[0]:
+		out += ["right"]
+	elif apple[0] < person[0]:
+		out += ["left"]
+
+	return out
+
+print "\n".join(snake())
