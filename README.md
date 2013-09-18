@@ -8,3 +8,9 @@ Years
 
 * 2012: Intermediate Stream
 * 2013: Advanced Stream
+
+Acheivements
+------------
+
+* 2012: High Distinction (**perfect** score)
+* 2013: High Distinction (**perfect** score)
