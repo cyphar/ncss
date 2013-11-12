@@ -25,14 +25,20 @@ class Term:
 		return [Term(self.mult ** other.mult, self.exp * other.mult)]
 
 	def __str__(self):
-		exp = ("^%d" % self.exp) if abs(self.exp) > 1 else ""
+		exp = ""
 
-		if self.mult == -1 and self.exp >= 1:
+		if abs(self.exp) > 1:
+			exp = "^%d" % self.exp
+
+		mult = ""
+		if self.mult == -1 and self.exp:
 			mult = "-"
-		else:
-			mult = ("%d" % self.mult) if (abs(self.mult) >= 1 and abs(self.exp) <= 0) or abs(self.mult) > 1 else ""
+		elif abs(self.mult) > 1 or not self.exp:
+			mult = "%d" % self.mult
 
-		num = "x" if abs(self.exp) > 0 else ""
+		num = ""
+		if self.exp:
+			num = "x"
 
 		return "%s%s%s" % (mult, num, exp) or "0"
 
@@ -57,7 +63,6 @@ for i in tokens:
 			s = [Term(1, 1)]
 		elif i == "-x":
 			s = [Term(-1, 1)]
-
 		else:
 			s = [Term(int(i), 0)]
 
@@ -137,8 +142,8 @@ out = ""
 if stack:
 	out = "%s" % stack[0]
 	for x in stack[1:]:
-		if not x.mult:
-			continue
-		out += " %c %s" % ("+-"[x.mult < 0], Term(abs(x.mult), x.exp))
+		if x.mult:
+			# Split out sign from term and then just add a term with the same magnitude of mult
+			out += " %c %s" % ("+-"[x.mult < 0], Term(abs(x.mult), x.exp))
 
 print(out or "0")
