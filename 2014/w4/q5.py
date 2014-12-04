@@ -1,7 +1,23 @@
 #!/usr/bin/env python3
 # Enter your code for "Bejeweled I" here.
 
-import re
+def find_groups(line, num=3, exclude=frozenset({"?"})):
+	"Finds all groups of length num and then yields their respective (start, end) indexes."
+
+	for start, _ in enumerate(line):
+		group = line[start:start+num]
+
+		# Ensure group length is maintained.
+		if len(group) != num:
+			continue
+
+		# Check that items aren't in the exclude list.
+		if any(item in exclude for item in group):
+			continue
+
+		# Check that all items are equal.
+		if all(group[0] == item for item in group):
+			yield (start, start+num)
 
 class Position(object):
 	def __init__(self, x, y):
@@ -24,21 +40,21 @@ class Grid(object):
 
 		# Find horizontal matches.
 		for y, line in enumerate(self.lines):
-			for match in re.finditer(r"([^?])\1\1\1*", "".join(line)):
-				for x in range(match.start(), match.end()):
+			for match in find_groups(line, num=3, exclude={"?"}):
+				for x in range(match[0], match[1]):
 					pos = Position(x, y)
 					removes.append(pos)
 
-				delta += 10 + 10 * (match.end() - match.start() - 3)
+				delta += 10
 
 		# Find vertical matches.
 		for y, line in enumerate(zip(*self.lines)):
-			for match in re.finditer(r"([^?])\1\1\1*", "".join(line)):
-				for x in range(match.start(), match.end()):
+			for match in find_groups(line, num=3, exclude={"?"}):
+				for x in range(match[0], match[1]):
 					pos = Position(y, x)
 					removes.append(pos)
 
-				delta += 10 + 10 * (match.end() - match.start() - 3)
+				delta += 10
 
 		# Remove the scheduled removals.
 		for remove in removes:

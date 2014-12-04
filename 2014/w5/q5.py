@@ -3,7 +3,24 @@
 
 # I ... don't want to talk about it.
 import copy
-import re
+
+def find_groups(line, num=3, exclude=frozenset({"?"})):
+	"Finds all groups of length num and then yields their respective (start, end) indexes."
+
+	for start, _ in enumerate(line):
+		group = line[start:start+num]
+
+		# Ensure group length is maintained.
+		if len(group) != num:
+			continue
+
+		# Check that items aren't in the exclude list.
+		if any(item in exclude for item in group):
+			continue
+
+		# Check that all items are equal.
+		if all(group[0] == item for item in group):
+			yield (start, start+num)
 
 class Position(object):
 	def __init__(self, x, y):
@@ -32,23 +49,23 @@ class Grid(object):
 		delta = 0
 		removes = []
 
-		# Find horizontal matches (there probably is a much nicer way than regex, but meh).
+		# Find horizontal matches.
 		for y, line in enumerate(self._lines):
-			for match in re.finditer(r"(.)\1\1\1*", "".join(line)):
-				for x in range(match.start(), match.end()):
+			for match in find_groups(line, num=3):
+				for x in range(match[0], match[1]):
 					pos = Position(x, y)
 					removes.append(pos)
 
-				delta += 10 + 10 * (match.end() - match.start() - 3)
+				delta += 10
 
-		# Find vertical matches (there probably is a much nicer way than regex, but meh).
+		# Find vertical matches.
 		for x, column in enumerate(zip(*self._lines)):
-			for match in re.finditer(r"(.)\1\1\1*", "".join(column)):
-				for y in range(match.start(), match.end()):
+			for match in find_groups(column, num=3):
+				for y in range(match[0], match[1]):
 					pos = Position(x, y)
 					removes.append(pos)
 
-				delta += 10 + 10 * (match.end() - match.start() - 3)
+				delta += 10
 
 		# Remove the scheduled removals.
 		for remove in removes:
